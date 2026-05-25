@@ -14,6 +14,7 @@ import org.springframework.core.env.Environment;
 public class GrpcJwtAutoConfiguration {
 
     private final Environment environment;
+
     private final GrpcJwtProperties grpcJwtProperties;
 
     public GrpcJwtAutoConfiguration(Environment environment, GrpcJwtProperties grpcJwtProperties) {
@@ -23,11 +24,11 @@ public class GrpcJwtAutoConfiguration {
 
     @Bean
     public JwtService jwtService() {
-        return new JwtService(environment, grpcJwtProperties);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     @Bean
     public AuthClientInterceptor authClientInterceptor() {
-        return new AuthClientInterceptor(jwtService());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

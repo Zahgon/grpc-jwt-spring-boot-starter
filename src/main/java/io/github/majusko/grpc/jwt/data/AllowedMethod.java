@@ -4,8 +4,11 @@ import java.util.Objects;
 import java.util.Set;
 
 public class AllowedMethod {
+
     private final String method;
+
     private final String ownerField;
+
     private final Set<String> roles;
 
     public AllowedMethod(String method, String ownerField, Set<String> roles) {
@@ -15,14 +18,14 @@ public class AllowedMethod {
     }
 
     public String getMethod() {
-        return method;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public String getOwnerField() {
-        return ownerField;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Set<String> getRoles() {
-        return roles;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

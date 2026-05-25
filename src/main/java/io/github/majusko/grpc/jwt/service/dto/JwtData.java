@@ -1,12 +1,13 @@
 package io.github.majusko.grpc.jwt.service.dto;
 
 import com.google.common.collect.Sets;
-
 import java.util.Objects;
 import java.util.Set;
 
 public class JwtData {
+
     private final String userId;
+
     private final Set<String> roles;
 
     public JwtData(String userId, String role) {
@@ -19,10 +20,10 @@ public class JwtData {
     }
 
     public String getUserId() {
-        return userId;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public Set<String> getRoles() {
-        return roles;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

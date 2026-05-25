@@ -1,19 +1,20 @@
 package io.github.majusko.grpc.jwt.service.dto;
 
 import lombok.AllArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 public class JwtToken {
+
     private String token;
+
     private LocalDateTime expiration;
 
     public String getToken() {
-        return token;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public LocalDateTime getExpiration() {
-        return expiration;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

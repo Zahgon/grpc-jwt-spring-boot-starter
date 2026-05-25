@@ -10,7 +10,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.core.env.Environment;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.LocalDateTime;
@@ -23,23 +22,22 @@ import java.util.stream.Collectors;
 public class JwtService {
 
     public static final String TOKEN_ENV = "token_env";
+
     public static final String JWT_ROLES = "jwt_roles";
 
     private static final String INTERNAL_ACCOUNT = "internal_account";
+
     private static final Double REFRESH_TIME_THRESHOLD = 0.2;
 
     private final GrpcJwtProperties properties;
 
     private JwtMetadata metadata;
+
     private JwtToken internal;
 
     public JwtService(Environment env, GrpcJwtProperties properties) {
         this.properties = properties;
-        this.metadata = JwtMetadata.builder()
-            .env(Arrays.stream(env.getActiveProfiles()).collect(Collectors.toList()))
-            .expirationSec(properties.getExpirationSec())
-            .key(generateKey(properties.getSecret(), properties.getAlgorithm()))
-            .build();
+        this.metadata = JwtMetadata.builder().env(Arrays.stream(env.getActiveProfiles()).collect(Collectors.toList())).expirationSec(properties.getExpirationSec()).key(generateKey(properties.getSecret(), properties.getAlgorithm())).build();
         this.internal = generateInternalToken(properties.getExpirationSec(), metadata);
     }
 
@@ -49,7 +47,7 @@ public class JwtService {
      * @return String version of your new JWT token
      */
     public String generate(JwtData data) {
-        return generateJwt(data, metadata);
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -58,13 +56,7 @@ public class JwtService {
      * @return String version of your internal JWT token.
      */
     public String getInternal() {
-        final double refreshThresholdValue = properties.getExpirationSec() * REFRESH_TIME_THRESHOLD;
-
-        if (LocalDateTime.now().plusSeconds((long) refreshThresholdValue).isAfter(internal.getExpiration())) {
-            refreshInternalToken();
-        }
-
-        return internal.getToken();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     /**
@@ -72,7 +64,7 @@ public class JwtService {
      * @return generated SecretKey with configuration from application.properties.
      */
     public SecretKey getKey() {
-        return metadata.getKey();
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private SecretKeySpec generateKey(String signingSecret, String signAlgorithm) {
@@ -84,16 +76,9 @@ public class JwtService {
     private String generateJwt(JwtData data, JwtMetadata metadata) {
         final LocalDateTime future = LocalDateTime.now().plusSeconds(metadata.getExpirationSec());
         final Claims ourClaims = Jwts.claims();
-
         ourClaims.put(JWT_ROLES, Lists.newArrayList(data.getRoles()));
         ourClaims.put(TOKEN_ENV, metadata.getEnv());
-
-        return Jwts.builder()
-            .setClaims(ourClaims)
-            .setSubject(data.getUserId())
-            .setIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-            .setExpiration(Date.from(future.atZone(ZoneId.systemDefault()).toInstant()))
-            .signWith(metadata.getKey()).compact();
+        return Jwts.builder().setClaims(ourClaims).setSubject(data.getUserId()).setIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant())).setExpiration(Date.from(future.atZone(ZoneId.systemDefault()).toInstant())).signWith(metadata.getKey()).compact();
     }
 
     private void refreshInternalToken() {
@@ -101,9 +86,6 @@ public class JwtService {
     }
 
     private JwtToken generateInternalToken(Long expirationSec, JwtMetadata jwtMetadata) {
-        return new JwtToken(
-            generateJwt(new JwtData(INTERNAL_ACCOUNT, Sets.newHashSet(GrpcRole.INTERNAL)), jwtMetadata),
-            LocalDateTime.now().plusSeconds(expirationSec)
-        );
+        return new JwtToken(generateJwt(new JwtData(INTERNAL_ACCOUNT, Sets.newHashSet(GrpcRole.INTERNAL)), jwtMetadata), LocalDateTime.now().plusSeconds(expirationSec));
     }
 }

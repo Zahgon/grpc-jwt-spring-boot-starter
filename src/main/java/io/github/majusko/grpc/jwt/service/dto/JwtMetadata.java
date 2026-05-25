@@ -2,26 +2,28 @@ package io.github.majusko.grpc.jwt.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-
 import javax.crypto.SecretKey;
 import java.util.List;
 
 @Builder
 @AllArgsConstructor
 public class JwtMetadata {
+
     private Long expirationSec;
+
     private SecretKey key;
+
     private List<String> env;
 
     public Long getExpirationSec() {
-        return expirationSec;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public SecretKey getKey() {
-        return key;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     public List<String> getEnv() {
-        return env;
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

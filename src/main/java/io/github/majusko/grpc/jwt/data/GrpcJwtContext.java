@@ -12,6 +12,6 @@ public class GrpcJwtContext {
     public static final io.grpc.Context.Key<JwtContextData> CONTEXT_DATA_KEY = io.grpc.Context.key(CONTEXT_DATA);
 
     public static Optional<JwtContextData> get() {
-        return Optional.ofNullable(CONTEXT_DATA_KEY.get());
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 }

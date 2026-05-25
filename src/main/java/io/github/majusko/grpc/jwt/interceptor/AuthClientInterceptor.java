@@ -17,50 +17,34 @@ public class AuthClientInterceptor implements ClientInterceptor {
     }
 
     @Override
-    public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
-        MethodDescriptor<ReqT, RespT> method,
-        CallOptions callOptions,
-        Channel next
-    ) {
-        return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(next.newCall(method, callOptions)) {
-
-            @Override
-            public void start(Listener<RespT> responseListener, final Metadata metadata) {
-                final Listener<RespT> tracingResponseListener = responseListener(responseListener);
-
-                super.start(tracingResponseListener, injectInternalToken(metadata));
-            }
-        };
+    public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+        throw new UnsupportedOperationException("STUB: not implemented");
     }
 
     private <RespT> ForwardingClientCallListener<RespT> responseListener(ClientCall.Listener<RespT> responseListener) {
         return new ForwardingClientCallListener.SimpleForwardingClientCallListener<RespT>(responseListener) {
+
             @Override
             public void onClose(Status status, Metadata metadata) {
-                handleAuthStatusCodes(status);
-
-                super.onClose(status, metadata);
+                throw new UnsupportedOperationException("STUB: not implemented");
             }
         };
     }
 
     private Metadata injectInternalToken(Metadata metadata) {
         final String authHeader = metadata.get(GrpcHeader.AUTHORIZATION);
-
-        if(authHeader == null || authHeader.isEmpty()) {
+        if (authHeader == null || authHeader.isEmpty()) {
             final String internalToken = jwtService.getInternal();
             metadata.put(GrpcHeader.AUTHORIZATION, internalToken);
         }
-
         return metadata;
     }
 
     private void handleAuthStatusCodes(Status status) {
-        if(status.getCode().equals(Status.UNAUTHENTICATED.getCode())) {
+        if (status.getCode().equals(Status.UNAUTHENTICATED.getCode())) {
             logger.error("Grpc call is unauthenticated.", status.getCause());
         }
-
-        if(status.getCode().equals(Status.PERMISSION_DENIED.getCode())) {
+        if (status.getCode().equals(Status.PERMISSION_DENIED.getCode())) {
             logger.error("Grpc call is unauthorized.", status.getCause());
         }
     }
